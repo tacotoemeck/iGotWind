@@ -8,16 +8,4 @@ const AppContainer = styled.section`
   }
 `;
 
-const TopContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-`;
-
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export { TopContainer, AppContainer, InputContainer };
+export { AppContainer };
