@@ -1,19 +1,19 @@
 const fetch = require("node-fetch");
 
 exports.handler = async (event, context) => {
-  const { LOCATION_IQ } = process.env;
-  const LATITUDE = event.queryStringParameters.LATITUDE;
-  const LONGITUDE = event.queryStringParameters.LONGITUDE;
-  console.log(process.env);
-  console.log(
-    "fetch is : ",
-    `https://eu1.locationiq.com/v1/reverse.php?key=${LOCATION_IQ}&lat=${LATITUDE}&lon=${LONGITUDE}&format=json`,
-  );
+  const { LOCATION_IQ } = process.env; // .env from netlify are not working FIX!!!!
+  const COORDS = event.queryStringParameters.COORDS;
+  const COORDS_OBJ = JSON.parse(COORDS);
+  const LATITUDE = COORDS_OBJ.LATITUDE;
+  const LONGITUDE = COORDS_OBJ.LONGITUDE;
+
+  console.log("type of coords are :", typeof JSON.parse(COORDS));
+  console.log("LATITUDE are :", LATITUDE);
+  console.log("coords_obj are :", COORDS_OBJ);
 
   return new Promise((resolve, reject) => {
-    // console.log()
     fetch(
-      `https://eu1.locationiq.com/v1/reverse.php?key=${LOCATION_IQ}&lat=${LATITUDE}&lon=${LONGITUDE}&format=json`,
+      `https://eu1.locationiq.com/v1/reverse.php?key=51f1e44926d233&lat=${LATITUDE}&lon=${LONGITUDE}&format=json`,
     )
       .then((res) => {
         if (res.ok) {

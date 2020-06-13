@@ -4,7 +4,7 @@ const TopContainerWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 
 const InputContainer = styled.div`
@@ -12,4 +12,6 @@ const InputContainer = styled.div`
   flex-direction: column;
 `;
 
-export { TopContainerWrapper, InputContainer };
+const CurrentAddress = styled.p``;
+
+export { TopContainerWrapper, InputContainer, CurrentAddress };

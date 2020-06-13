@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import InputWithIcon from "./LocationInput/LocationInput";
-import { TopContainerWrapper, InputContainer } from "./TopContainer.style";
+import {
+  TopContainerWrapper,
+  InputContainer,
+  CurrentAddress,
+} from "./TopContainer.style";
 import SurfIcon from "../../img/svg/surfIcon";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
-// import func from '../../../.netlify'
-// import func from '../../../functions/getCurrentAddress/getCurrentAddress.js'
+// import { ThemeConsumer } from "styled-components";
 
 function TopContainer(props) {
   const getCurrentCoordinates = async () => {
@@ -24,22 +27,20 @@ function TopContainer(props) {
 
     const func = async () => {
       const fetchLocation = await fetch(
-        `../../../.netlify/functions/fetchAddress/fetchAddress.js?LATITUDE=${props.currentLocationCoordinates.latitude}?LONGITUDE=${props.currentLocationCoordinates.longitude}`,
+        `../../../.netlify/functions/fetchAddress/fetchAddress.js?COORDS={"LATITUDE": ${props.currentLocationCoordinates.latitude}, "LONGITUDE":${props.currentLocationCoordinates.longitude}}`,
       );
-      //   const fetchLocation = await fetch(
-      //     `../../../.netlify/functions/getCurrentAddress/getCurrentAddress.js`,
-      //   );
 
-      const finalFetch = await fetchLocation.json();
-      console.log(finalFetch);
+      const finalFetch = await fetchLocation.json().then((data) => {
+        props.setCurrentPostCode(data);
+        console.log("final fetch is :", props.currentPostCode);
+      });
     };
 
     func();
   }, [props.currentLocationCoordinates]);
 
-  return (
-    <TopContainerWrapper>
-      <SurfIcon />
+  const inputMode = (
+    <>
       <InputContainer>
         <InputWithIcon />
         <Link
@@ -49,13 +50,29 @@ function TopContainer(props) {
           use current
         </Link>
       </InputContainer>
-
       <Button
         variant="outlined"
         color="primary"
         onClick={getCurrentCoordinates}>
         Set
       </Button>
+      ;
+    </>
+  );
+
+  return (
+    <TopContainerWrapper>
+      <SurfIcon />
+      {/* {inputMode} */}
+      {!props.currentPostCode ? (
+        inputMode
+      ) : (
+        <CurrentAddress>
+          {" "}
+          {props.currentPostCode.address.city},{" "}
+          {props.currentPostCode.address.postcode}{" "}
+        </CurrentAddress>
+      )}
     </TopContainerWrapper>
   );
 }
