@@ -127,7 +127,7 @@ function DisplayTableContainer(props) {
             asyncLoop();
             // set the function to send a fetch request every 0.5s so server can handle the requests.
             spaceRequests(index);
-          }, 500);
+          }, 1000);
         }
       }
       spaceRequests(-1);
