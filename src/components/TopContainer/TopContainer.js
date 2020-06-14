@@ -60,8 +60,11 @@ function TopContainer(props) {
         setAddressSelectionMode("dropdown");
       });
     };
-
-    func();
+    if (!addressInput) {
+      return;
+    } else {
+      func();
+    }
   };
 
   useEffect(() => {
