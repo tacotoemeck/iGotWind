@@ -8,6 +8,7 @@ const AppContainer = styled.section`
   }
   font-family: "Roboto", sans-serif;
   background-color: #f0efea;
+  text-align: center;
 `;
 
 export { AppContainer };

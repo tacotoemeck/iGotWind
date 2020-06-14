@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     display: "flex",
     flexDirection: "row",
-    maxHeight: "35px",
+    maxHeight: "38px",
+    width: "100%",
   },
   button: {
     fontSize: "0.8rem",

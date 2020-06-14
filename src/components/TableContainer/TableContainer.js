@@ -4,14 +4,14 @@ import ChevronLeft from "@material-ui/icons/ChevronLeft";
 import ChevronRight from "@material-ui/icons/ChevronRight";
 import Clear from "@material-ui/icons/Clear";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
-
+import { TableTitleText } from "./TableContainer.style";
 import FirstPage from "@material-ui/icons/FirstPage";
 import LastPage from "@material-ui/icons/LastPage";
 
 import Search from "@material-ui/icons/Search";
 
 function identifyConditionsQualityBasedOnUserLevel(windSpeed, userLevel) {
-  if (userLevel === "novice") {
+  if (userLevel === "Novice") {
     if (windSpeed > 0 && windSpeed < 5) return "calm";
     if (windSpeed > 5 && windSpeed < 10) return "ok";
     if (windSpeed > 10 && windSpeed < 15) return "good";
@@ -83,6 +83,7 @@ function DisplayTableContainer(props) {
             index++;
 
             const asyncLoop = async () => {
+              const { currentPostCode } = props;
               const fetchWeather = await fetch(
                 `../../../.netlify/functions/getWeatherData/getWeatherData.js?COORDS={"LATITUDE":${modifiedArray[index].latitude}, "LONGITUDE":${modifiedArray[index].longitude}}`,
               );
@@ -98,25 +99,29 @@ function DisplayTableContainer(props) {
                   " " +
                   identifyWindDirection(data.wind.deg);
                 // get wind direction
-                // modifiedArray[index].windDirection = `↙️${data.wind.deg}`;
+
                 // // analyze conditions
                 modifiedArray[
                   index
                 ].conditions = identifyConditionsQualityBasedOnUserLevel(
                   (Number(data.wind.speed) * 1.943844).toFixed(2),
-                  "novice",
+                  props.userLevel,
                 );
               });
 
-              await fetchLocation.json().then((data) => {
-                modifiedArray[index].distance = (
-                  Number(data.routes[0].distance) / 1000
-                ).toFixed(2);
+              await fetchLocation
+                .json()
+                .then((data) => {
+                  modifiedArray[index].distance =
+                    (Number(data.routes[0].distance) / 1000).toFixed(2) + " km";
 
-                props.setAllSurfLocationsArray(modifiedArray);
-                console.log("modifiedarray is :", modifiedArray);
-                setTableRows(copyTableRows);
-              });
+                  props.setAllSurfLocationsArray(modifiedArray);
+                  console.log("modifiedarray is :", modifiedArray);
+                  setTableRows(copyTableRows);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
             };
 
             asyncLoop();
@@ -130,50 +135,56 @@ function DisplayTableContainer(props) {
   }, [props.currentPostCode]);
 
   return (
-    <MaterialTable
-      title=""
-      icons={tableIcons}
-      columns={[
-        {
-          title: "Name",
-          field: "name",
-          cellStyle: {
-            backgroundColor: "#ABD2D9",
-            color: "#5C6164",
-            fontSize: "12px",
-            fontWeight: "bold",
-            width: 125,
-            maxWidth: 125,
-            padding: "10px",
+    <>
+      <TableTitleText>
+        click top of the table to sort results based on:
+        <br /> distance, quality, wind speed or spot name
+      </TableTitleText>
+      <MaterialTable
+        title=""
+        icons={tableIcons}
+        columns={[
+          {
+            title: "Name",
+            field: "name",
+            cellStyle: {
+              backgroundColor: "#ABD2D9",
+              color: "#5C6164",
+              fontSize: "12px",
+              fontWeight: "bold",
+              width: 125,
+              maxWidth: 125,
+              padding: "10px",
+            },
+            headerStyle: {
+              backgroundColor: "#5C6164",
+              fontSize: "12px",
+            },
           },
+          { title: "Distance", field: "distance" },
+          { title: "Quality", field: "conditions" },
+          {
+            title: "Wind",
+            field: "windSpeed",
+          },
+        ]}
+        data={props.allSurfLocationsArray}
+        options={{
+          sorting: true,
           headerStyle: {
             backgroundColor: "#5C6164",
+            color: "#FFF",
+            fontWeight: "bold",
             fontSize: "12px",
+            width: 25,
+            maxWidth: 25,
+            paddingLeft: "5px",
+            paddingRight: "5px",
+            textAlign: "center",
           },
-        },
-        { title: "Distance", field: "distance" },
-        { title: "Quality", field: "conditions" },
-        {
-          title: "Wind",
-          field: "windSpeed",
-        },
-      ]}
-      data={props.allSurfLocationsArray}
-      options={{
-        sorting: true,
-        headerStyle: {
-          backgroundColor: "#5C6164",
-          color: "#FFF",
-          fontWeight: "bold",
-          fontSize: "12px",
-          width: 25,
-          maxWidth: 25,
-          paddingLeft: "5px",
-          paddingRight: "5px",
-          textAlign: "center",
-        },
-      }}
-    />
+        }}
+      />
+    </>
   );
 }
 

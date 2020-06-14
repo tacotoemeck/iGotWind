@@ -18,6 +18,22 @@ const InputContainer = styled.div`
   flex-direction: column;
 `;
 
+const TopContainerTitle = styled.p`
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  font-family: "Lato", sans-serif;
+  text-transform: uppercase;
+`;
+
 const CurrentAddress = styled.p``;
 
-export { TopContainerWrapper, InputContainer, CurrentAddress, Wrapper };
+export {
+  TopContainerWrapper,
+  InputContainer,
+  CurrentAddress,
+  Wrapper,
+  TopContainerTitle,
+};

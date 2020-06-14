@@ -5,8 +5,8 @@ import {
   InputContainer,
   CurrentAddress,
   Wrapper,
+  TopContainerTitle,
 } from "./TopContainer.style";
-import SurfIcon from "../../img/svg/surfIcon";
 import Link from "@material-ui/core/Link";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -25,8 +25,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
   link: {
-    marginBottom: "10px",
-    fontSize: "12px",
+    fontSize: "11px",
     marginTop: "-5px",
     textAlign: "left",
   },
@@ -70,12 +69,10 @@ function TopContainer(props) {
       const fetchLocation = await fetch(
         `../../../.netlify/functions/fetchAddress/fetchAddress.js?COORDS={"LATITUDE": ${props.currentLocationCoordinates.latitude}, "LONGITUDE":${props.currentLocationCoordinates.longitude}}`,
       );
-
       await fetchLocation.json().then((data) => {
         props.setCurrentPostCode(data);
       });
     };
-
     func();
   }, [props.currentLocationCoordinates]);
 
@@ -83,9 +80,7 @@ function TopContainer(props) {
     const fetchLocation = await fetch(
       `../../../.netlify/functions/fetchAddress/fetchAddress.js?COORDS={"LATITUDE": ${event.target.value.LATITUDE}, "LONGITUDE":${event.target.value.LONGITUDE}}`,
     );
-
     await fetchLocation.json().then((data) => {
-      console.log(data);
       props.setCurrentPostCode(data);
     });
   };
@@ -126,7 +121,7 @@ function TopContainer(props) {
             variant="body2"
             className={classes.link}
             onClick={getCurrentCoordinates}>
-            use current
+            use your current location
           </Link>
         </InputContainer>
       </>
@@ -135,20 +130,21 @@ function TopContainer(props) {
     );
 
   return (
-    <Wrapper>
-      <SurfIcon />
-      <TopContainerWrapper>
-        {/* <SurfIcon /> */}
-        {!props.currentPostCode ? (
-          inputMode
-        ) : (
-          <CurrentAddress>
-            {props.currentPostCode.address.city},
-            {props.currentPostCode.address.postcode}
-          </CurrentAddress>
-        )}
-      </TopContainerWrapper>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <TopContainerTitle>choose current location</TopContainerTitle>
+        <TopContainerWrapper>
+          {!props.currentPostCode ? (
+            inputMode
+          ) : (
+            <CurrentAddress>
+              {props.currentPostCode.address.city},
+              {props.currentPostCode.address.postcode}
+            </CurrentAddress>
+          )}
+        </TopContainerWrapper>
+      </Wrapper>
+    </>
   );
 }
 
