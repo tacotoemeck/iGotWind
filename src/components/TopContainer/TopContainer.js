@@ -6,7 +6,6 @@ import {
   CurrentAddress,
 } from "./TopContainer.style";
 import SurfIcon from "../../img/svg/surfIcon";
-import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";

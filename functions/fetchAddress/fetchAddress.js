@@ -7,10 +7,6 @@ exports.handler = async (event, context) => {
   const LATITUDE = COORDS_OBJ.LATITUDE;
   const LONGITUDE = COORDS_OBJ.LONGITUDE;
 
-  console.log("type of coords are :", typeof JSON.parse(COORDS));
-  console.log("LATITUDE are :", LATITUDE);
-  console.log("coords_obj are :", COORDS_OBJ);
-
   return new Promise((resolve, reject) => {
     fetch(
       `https://eu1.locationiq.com/v1/reverse.php?key=51f1e44926d233&lat=${LATITUDE}&lon=${LONGITUDE}&format=json`,
