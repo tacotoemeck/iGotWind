@@ -68,10 +68,13 @@ function TopContainer(props) {
     const func = async () => {
       const fetchLocation = await fetch(
         `../../../.netlify/functions/fetchAddress/fetchAddress.js?COORDS={"LATITUDE": ${props.currentLocationCoordinates.latitude}, "LONGITUDE":${props.currentLocationCoordinates.longitude}}`,
-      );
-      await fetchLocation.json().then((data) => {
-        props.setCurrentPostCode(data);
-      });
+      ).catch(console.error);
+      await fetchLocation
+        .json()
+        .then((data) => {
+          props.setCurrentPostCode(data);
+        })
+        .catch(console.error);
     };
     func();
   }, [props.currentLocationCoordinates]);
@@ -79,10 +82,13 @@ function TopContainer(props) {
   const handleChange = async (event) => {
     const fetchLocation = await fetch(
       `../../../.netlify/functions/fetchAddress/fetchAddress.js?COORDS={"LATITUDE": ${event.target.value.LATITUDE}, "LONGITUDE":${event.target.value.LONGITUDE}}`,
-    );
-    await fetchLocation.json().then((data) => {
-      props.setCurrentPostCode(data);
-    });
+    ).catch(console.error);
+    await fetchLocation
+      .json()
+      .then((data) => {
+        props.setCurrentPostCode(data);
+      })
+      .catch(console.error);
   };
 
   const pickAddressInput = (
