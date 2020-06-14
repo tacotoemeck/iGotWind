@@ -9,7 +9,7 @@ exports.handler = async (event, context) => {
 
   return new Promise((resolve, reject) => {
     fetch(
-      `https://eu1.locationiq.com/v1/reverse.php?key=51f1e44926d233&lat=${LATITUDE}&lon=${LONGITUDE}&format=json`,
+      `https://eu1.locationiq.com/v1/reverse.php?key=${LOCATION_IQ}&lat=${LATITUDE}&lon=${LONGITUDE}&format=json`,
     )
       .then((res) => {
         if (res.ok) {

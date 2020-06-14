@@ -6,15 +6,10 @@ exports.handler = async (event, context) => {
   const COORDS_OBJ = JSON.parse(COORDS);
   const LATITUDE = COORDS_OBJ.LATITUDE;
   const LONGITUDE = COORDS_OBJ.LONGITUDE;
-  console.log("getWeatherData");
-  console.log("latitude is :", LATITUDE);
-  console.log(
-    "url strig is: ",
-    `api.openweathermap.org/data/2.5/weather?lat=${LATITUDE}&lon=${LONGITUDE}&appid=15a0fc5452198095ca6be86f96f2bc51`,
-  );
+
   return new Promise((resolve, reject) => {
     fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${LATITUDE}&lon=${LONGITUDE}&appid=15a0fc5452198095ca6be86f96f2bc51`,
+      `https://api.openweathermap.org/data/2.5/weather?lat=${LATITUDE}&lon=${LONGITUDE}&appid=${WEATHER_API}`,
     )
       .then((res) => {
         if (res.ok) {

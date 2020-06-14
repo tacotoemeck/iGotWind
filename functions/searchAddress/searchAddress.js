@@ -6,7 +6,7 @@ exports.handler = async (event, context) => {
 
   return new Promise((resolve, reject) => {
     fetch(
-      `https://eu1.locationiq.com/v1/search.php?key=51f1e44926d233&q=${SEARCH_PARAMS}&format=json`,
+      `https://eu1.locationiq.com/v1/search.php?key=${LOCATION_IQ}&q=${SEARCH_PARAMS}&format=json`,
     )
       .then((res) => {
         if (res.ok) {
