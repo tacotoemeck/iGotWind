@@ -75,7 +75,7 @@ function DisplayTableContainer(props) {
 
       // use recursion to limit number of API calls to 2 per 1 sec max ( due to API limitations )
       function spaceRequests(index) {
-        if (index < modifiedArray.length) {
+        if (index < modifiedArray.length - 1) {
           let copyTableRows = [...tableRows];
           console.log(copyTableRows);
           setTimeout(() => {
@@ -84,27 +84,30 @@ function DisplayTableContainer(props) {
             const asyncLoop = async () => {
               const fetchWeather = await fetch(
                 `../../../.netlify/functions/getWeatherData/getWeatherData.js?COORDS={"LATITUDE":${modifiedArray[index].latitude}, "LONGITUDE":${modifiedArray[index].longitude}}`,
-              );
+              ).catch(console.error);
 
               const fetchLocation = await fetch(
                 `../../../.netlify/functions/getDistances/getDistances.js?COORDS={"CURRENT_LATITUDE":${currentLat}, "CURRENT_LONGITUDE":${currentLon}, "DESTINATION_LATITUDE":${modifiedArray[index].latitude}, "DESTINATION_LONGITUDE":${modifiedArray[index].longitude}}`,
-              );
+              ).catch(console.error);
 
-              await fetchWeather.json().then((data) => {
-                // convert m per second to knots and round to 2 decimels + wind direction
-                modifiedArray[index].windSpeed =
-                  (Number(data.wind.speed) * 1.943844).toFixed(2) +
-                  " " +
-                  identifyWindDirection(data.wind.deg);
+              await fetchWeather
+                .json()
+                .then((data) => {
+                  // convert m per second to knots and round to 2 decimels + wind direction
+                  modifiedArray[index].windSpeed =
+                    (Number(data.wind.speed) * 1.943844).toFixed(2) +
+                    " " +
+                    identifyWindDirection(data.wind.deg);
 
-                // // analyze conditions
-                modifiedArray[
-                  index
-                ].conditions = identifyConditionsQualityBasedOnUserLevel(
-                  (Number(data.wind.speed) * 1.943844).toFixed(2),
-                  props.userLevel,
-                );
-              });
+                  // // analyze conditions
+                  modifiedArray[
+                    index
+                  ].conditions = identifyConditionsQualityBasedOnUserLevel(
+                    (Number(data.wind.speed) * 1.943844).toFixed(2),
+                    props.userLevel,
+                  );
+                })
+                .catch(console.error);
 
               await fetchLocation
                 .json()
@@ -124,7 +127,7 @@ function DisplayTableContainer(props) {
             asyncLoop();
             // set the function to send a fetch request every 0.5s so server can handle the requests.
             spaceRequests(index);
-          }, 500);
+          }, 1000);
         }
       }
       spaceRequests(-1);
