@@ -75,15 +75,13 @@ function DisplayTableContainer(props) {
 
       // use recursion to limit number of API calls to 2 per 1 sec max ( due to API limitations )
       function spaceRequests(index) {
-        // change below num to modifiedArray.length
-        if (index < 5) {
+        if (index < modifiedArray.length) {
           let copyTableRows = [...tableRows];
           console.log(copyTableRows);
           setTimeout(() => {
             index++;
 
             const asyncLoop = async () => {
-              const { currentPostCode } = props;
               const fetchWeather = await fetch(
                 `../../../.netlify/functions/getWeatherData/getWeatherData.js?COORDS={"LATITUDE":${modifiedArray[index].latitude}, "LONGITUDE":${modifiedArray[index].longitude}}`,
               );
@@ -98,7 +96,6 @@ function DisplayTableContainer(props) {
                   (Number(data.wind.speed) * 1.943844).toFixed(2) +
                   " " +
                   identifyWindDirection(data.wind.deg);
-                // get wind direction
 
                 // // analyze conditions
                 modifiedArray[
@@ -125,7 +122,7 @@ function DisplayTableContainer(props) {
             };
 
             asyncLoop();
-
+            // set the function to send a fetch request every 0.5s so server can handle the requests.
             spaceRequests(index);
           }, 500);
         }

@@ -10,11 +10,11 @@ exports.handler = async (event, context) => {
   const DESTINATION_LATITUDE = COORDS_OBJ.DESTINATION_LATITUDE;
   const DESTINATION_LONGITUDE = COORDS_OBJ.DESTINATION_LONGITUDE;
   console.log(
-    `address is : https://eu1.locationiq.com/v1/directions/driving/${CURRENT_LONGITUDE},${CURRENT_LATITUDE};${DESTINATION_LONGITUDE},${DESTINATION_LATITUDE}?key=51f1e44926d233&overview=false`,
+    `address is : https://eu1.locationiq.com/v1/directions/driving/${CURRENT_LONGITUDE},${CURRENT_LATITUDE};${DESTINATION_LONGITUDE},${DESTINATION_LATITUDE}?key=${LOCATION_IQ}&overview=false`,
   );
   return new Promise((resolve, reject) => {
     fetch(
-      `https://eu1.locationiq.com/v1/directions/driving/${CURRENT_LONGITUDE},${CURRENT_LATITUDE};${DESTINATION_LONGITUDE},${DESTINATION_LATITUDE}?key=51f1e44926d233&overview=false`,
+      `https://eu1.locationiq.com/v1/directions/driving/${CURRENT_LONGITUDE},${CURRENT_LATITUDE};${DESTINATION_LONGITUDE},${DESTINATION_LATITUDE}?key=${LOCATION_IQ}&overview=false`,
     )
       .then((res) => {
         if (res.ok) {
