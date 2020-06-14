@@ -5,7 +5,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 // import SurfIcon from "../../../img/svg/surfIcon";
+import { LocationInputWrapper } from "./LocationInput.style";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
@@ -13,6 +15,13 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     display: "flex",
     flexDirection: "row",
+    maxHeight: "35px",
+  },
+  button: {
+    fontSize: "0.8rem",
+    fontWeight: "bold",
+    padding: "0.5rem",
+    backgroundColor: "#5C6164",
   },
 }));
 
@@ -24,7 +33,7 @@ export default function InputWithIcon(props) {
   };
 
   return (
-    <div>
+    <LocationInputWrapper>
       <FormControl className={classes.form}>
         <>
           <InputLabel htmlFor="input-with-icon-adornment">
@@ -41,12 +50,13 @@ export default function InputWithIcon(props) {
           />
         </>
         <Button
-          variant="outlined"
+          className={classes.button}
+          variant="contained"
           color="primary"
           onClick={props.searchAddress}>
-          Set
+          Search
         </Button>
       </FormControl>
-    </div>
+    </LocationInputWrapper>
   );
 }

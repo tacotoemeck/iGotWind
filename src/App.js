@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import TopContainer from "./components/TopContainer/TopContainer";
+import Buttons from "./components/Buttons/Buttons";
 import DisplayTableContainer from "./components/TableContainer/TableContainer";
+
 import { AppContainer } from "./App.style";
 import locations from "./utils/locations";
 
@@ -24,7 +26,9 @@ function App() {
         setCurrentPostCode={setCurrentPostCode}
         currentPostCode={currentPostCode}
       />
+      <Buttons setUserLevel={setUserLevel} />
       <DisplayTableContainer
+        userLevel={userLevel}
         currentPostCode={currentPostCode}
         allSurfLocationsArray={allSurfLocationsArray}
         setAllSurfLocationsArray={setAllSurfLocationsArray}

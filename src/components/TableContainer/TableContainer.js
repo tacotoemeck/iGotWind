@@ -1,131 +1,71 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import React, { useEffect, useState, forwardRef } from "react";
+import MaterialTable from "material-table";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import Clear from "@material-ui/icons/Clear";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
 
-const useRowStyles = makeStyles({
-  root: {
-    "& > *": {
-      borderBottom: "unset",
-    },
-  },
-});
+import FirstPage from "@material-ui/icons/FirstPage";
+import LastPage from "@material-ui/icons/LastPage";
 
-function createData(name, distance, conditions, history) {
-  return {
-    name,
-    distance,
-    conditions,
-    history: [
-      { date: "2020-01-05", customerId: "11091700", amount: 3 },
-      { date: "2020-01-02", customerId: "Anonymous", amount: 1 },
-    ],
-  };
+import Search from "@material-ui/icons/Search";
+
+function identifyConditionsQualityBasedOnUserLevel(windSpeed, userLevel) {
+  if (userLevel === "novice") {
+    if (windSpeed > 0 && windSpeed < 5) return "calm";
+    if (windSpeed > 5 && windSpeed < 10) return "ok";
+    if (windSpeed > 10 && windSpeed < 15) return "good";
+  }
+  if (userLevel === "Intermediate") {
+    if (windSpeed > 0 && windSpeed < 5) return "calm";
+    if (windSpeed > 5 && windSpeed < 15) return "ok";
+    if (windSpeed > 15 && windSpeed < 20) return "good";
+  }
+  if (userLevel === "Expert") {
+    if (windSpeed > 0 && windSpeed < 15) return "calm";
+    if (windSpeed > 15 && windSpeed < 20) return "ok";
+    if (windSpeed > 20) return "good";
+  }
 }
 
-function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
-  const classes = useRowStyles();
-
-  return (
-    <React.Fragment>
-      <TableRow className={classes.root}>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell component="th" scope="row">
-          {row.name}
-        </TableCell>
-        <TableCell align="right">{row.distance}</TableCell>
-        <TableCell align="right">{row.conditions}</TableCell>
-        {/* <TableCell align="right">{row.carbs}</TableCell>
-        <TableCell align="right">{row.protein}</TableCell> */}
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
-                gotWinds?
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Wind Speed</TableCell>
-                    <TableCell>Wind Direction</TableCell>
-                    {/* <TableCell align="right">Show</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell> */}
-                  </TableRow>
-                </TableHead>
-                {/* <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {Math.round(historyRow.amount * row.price * 100) / 100}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody> */}
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
+function identifyWindDirection(degrees) {
+  var val = Math.floor(degrees / 22.5 + 0.5);
+  var arr = [
+    "N⬆️",
+    "NNE↗️",
+    "NE↗️",
+    "ENE↗️",
+    "E➡️",
+    "ESE↘️",
+    "SE↘️",
+    "SSE↘️",
+    "S⬇️",
+    "SSW↙️",
+    "SW↙️",
+    "WSW↙️",
+    "W⬅️",
+    "WNW↖️",
+    "NW↖️",
+    "NNW↖️",
+  ];
+  return arr[val % 16];
 }
-
-// Row.propTypes = {
-//   row: PropTypes.shape({
-//     distance: PropTypes.number.isRequired,
-//     conditions: PropTypes.number.isRequired,
-//     fat: PropTypes.number.isRequired,
-//     history: PropTypes.arrayOf(
-//       PropTypes.shape({
-//         amount: PropTypes.number.isRequired,
-//         customerId: PropTypes.string.isRequired,
-//         date: PropTypes.string.isRequired,
-//       }),
-//     ).isRequired,
-//     name: PropTypes.string.isRequired,
-//     price: PropTypes.number.isRequired,
-//     protein: PropTypes.number.isRequired,
-//   }).isRequired,
-// };
-
-let rows = [
-  // createData("Frozen yoghurt", 159, 6.0),
-  // createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 4.99),
-  // createData("Eclair", 262, 16.0, 24, 6.0, 3.79),
-  // createData("Cupcake", 305, 3.7, 67, 4.3, 2.5),
-  // createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-];
 
 function DisplayTableContainer(props) {
   const [tableRows, setTableRows] = useState([]);
+  const tableIcons = {
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    SortArrow: forwardRef((props, ref) => (
+      <ArrowDownward {...props} ref={ref} />
+    )),
+    PreviousPage: forwardRef((props, ref) => (
+      <ChevronLeft {...props} ref={ref} />
+    )),
+    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  };
   useEffect(() => {
     let currentLat = props.currentPostCode.lat;
     let currentLon = props.currentPostCode.lon;
@@ -133,6 +73,7 @@ function DisplayTableContainer(props) {
     if (props.currentPostCode) {
       let modifiedArray = [...props.allSurfLocationsArray];
 
+      // use recursion to limit number of API calls to 2 per 1 sec max ( due to API limitations )
       function spaceRequests(index) {
         // change below num to modifiedArray.length
         if (index < 5) {
@@ -142,24 +83,35 @@ function DisplayTableContainer(props) {
             index++;
 
             const asyncLoop = async () => {
-              // setDelay(modifiedArray[i]);
+              const fetchWeather = await fetch(
+                `../../../.netlify/functions/getWeatherData/getWeatherData.js?COORDS={"LATITUDE":${modifiedArray[index].latitude}, "LONGITUDE":${modifiedArray[index].longitude}}`,
+              );
 
               const fetchLocation = await fetch(
                 `../../../.netlify/functions/getDistances/getDistances.js?COORDS={"CURRENT_LATITUDE":${currentLat}, "CURRENT_LONGITUDE":${currentLon}, "DESTINATION_LATITUDE":${modifiedArray[index].latitude}, "DESTINATION_LONGITUDE":${modifiedArray[index].longitude}}`,
               );
 
+              await fetchWeather.json().then((data) => {
+                // convert m per second to knots and round to 2 decimels + wind direction
+                modifiedArray[index].windSpeed =
+                  (Number(data.wind.speed) * 1.943844).toFixed(2) +
+                  " " +
+                  identifyWindDirection(data.wind.deg);
+                // get wind direction
+                // modifiedArray[index].windDirection = `↙️${data.wind.deg}`;
+                // // analyze conditions
+                modifiedArray[
+                  index
+                ].conditions = identifyConditionsQualityBasedOnUserLevel(
+                  (Number(data.wind.speed) * 1.943844).toFixed(2),
+                  "novice",
+                );
+              });
+
               await fetchLocation.json().then((data) => {
                 modifiedArray[index].distance = (
                   Number(data.routes[0].distance) / 1000
                 ).toFixed(2);
-
-                copyTableRows.push(
-                  createData(
-                    modifiedArray[index].name,
-                    modifiedArray[index].distance,
-                    "n/a",
-                  ),
-                );
 
                 props.setAllSurfLocationsArray(modifiedArray);
                 console.log("modifiedarray is :", modifiedArray);
@@ -173,43 +125,55 @@ function DisplayTableContainer(props) {
           }, 500);
         }
       }
-      spaceRequests(0);
+      spaceRequests(-1);
     }
   }, [props.currentPostCode]);
 
-  // useEffect(() => {
-  //   // console.log(props.allSurfLocationsArray[67]);
-  //   if (props.allSurfLocationsArray[67].distance) {
-  //     let copyTableRows = [];
-  //     props.allSurfLocationsArray.forEach((location) => {
-  //       console.log(location.distance);
-  //       copyTableRows.push(createData(location.name, location.distance, "n/a"));
-  //     });
-
-  //     setTableRows(copyTableRows);
-  //   }
-  // }, []);
-
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Location</TableCell>
-            <TableCell align="right">Distance</TableCell>
-            <TableCell align="right">Conditions</TableCell>
-            {/* <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {props.allSurfLocationsArray.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <MaterialTable
+      title=""
+      icons={tableIcons}
+      columns={[
+        {
+          title: "Name",
+          field: "name",
+          cellStyle: {
+            backgroundColor: "#ABD2D9",
+            color: "#5C6164",
+            fontSize: "12px",
+            fontWeight: "bold",
+            width: 125,
+            maxWidth: 125,
+            padding: "10px",
+          },
+          headerStyle: {
+            backgroundColor: "#5C6164",
+            fontSize: "12px",
+          },
+        },
+        { title: "Distance", field: "distance" },
+        { title: "Quality", field: "conditions" },
+        {
+          title: "Wind",
+          field: "windSpeed",
+        },
+      ]}
+      data={props.allSurfLocationsArray}
+      options={{
+        sorting: true,
+        headerStyle: {
+          backgroundColor: "#5C6164",
+          color: "#FFF",
+          fontWeight: "bold",
+          fontSize: "12px",
+          width: 25,
+          maxWidth: 25,
+          paddingLeft: "5px",
+          paddingRight: "5px",
+          textAlign: "center",
+        },
+      }}
+    />
   );
 }
 

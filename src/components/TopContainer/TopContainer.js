@@ -4,6 +4,7 @@ import {
   TopContainerWrapper,
   InputContainer,
   CurrentAddress,
+  Wrapper,
 } from "./TopContainer.style";
 import SurfIcon from "../../img/svg/surfIcon";
 import Link from "@material-ui/core/Link";
@@ -22,6 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
+  },
+  link: {
+    marginBottom: "10px",
+    fontSize: "12px",
+    marginTop: "-5px",
+    textAlign: "left",
   },
 }));
 
@@ -117,6 +124,7 @@ function TopContainer(props) {
           <Link
             component="button"
             variant="body2"
+            className={classes.link}
             onClick={getCurrentCoordinates}>
             use current
           </Link>
@@ -127,17 +135,20 @@ function TopContainer(props) {
     );
 
   return (
-    <TopContainerWrapper>
+    <Wrapper>
       <SurfIcon />
-      {!props.currentPostCode ? (
-        inputMode
-      ) : (
-        <CurrentAddress>
-          {props.currentPostCode.address.city},
-          {props.currentPostCode.address.postcode}
-        </CurrentAddress>
-      )}
-    </TopContainerWrapper>
+      <TopContainerWrapper>
+        {/* <SurfIcon /> */}
+        {!props.currentPostCode ? (
+          inputMode
+        ) : (
+          <CurrentAddress>
+            {props.currentPostCode.address.city},
+            {props.currentPostCode.address.postcode}
+          </CurrentAddress>
+        )}
+      </TopContainerWrapper>
+    </Wrapper>
   );
 }
 

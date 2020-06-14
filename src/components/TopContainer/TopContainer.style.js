@@ -1,5 +1,11 @@
 import styled from "styled-components";
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const TopContainerWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -14,4 +20,4 @@ const InputContainer = styled.div`
 
 const CurrentAddress = styled.p``;
 
-export { TopContainerWrapper, InputContainer, CurrentAddress };
+export { TopContainerWrapper, InputContainer, CurrentAddress, Wrapper };
