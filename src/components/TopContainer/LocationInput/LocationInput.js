@@ -5,32 +5,59 @@ import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 // import SurfIcon from "../../../img/svg/surfIcon";
+import { LocationInputWrapper } from "./LocationInput.style";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 
+import Button from "@material-ui/core/Button";
+
 const useStyles = makeStyles((theme) => ({
-  margin: {
+  form: {
     margin: theme.spacing(1),
+    display: "flex",
+    flexDirection: "row",
+    maxHeight: "38px",
+    width: "100%",
+  },
+  button: {
+    fontSize: "0.8rem",
+    fontWeight: "bold",
+    padding: "0.5rem",
+    backgroundColor: "#5C6164",
   },
 }));
 
-export default function InputWithIcon() {
+export default function InputWithIcon(props) {
   const classes = useStyles();
 
+  const handleChange = async (event) => {
+    props.setAddressInput(event.target.value);
+  };
+
   return (
-    <div>
-      <FormControl className={classes.margin}>
-        <InputLabel htmlFor="input-with-icon-adornment">
-          Enter location
-        </InputLabel>
-        <Input
-          id="input-with-icon-adornment"
-          startAdornment={
-            <InputAdornment position="start">
-              <LocationOnIcon />
-            </InputAdornment>
-          }
-        />
+    <LocationInputWrapper>
+      <FormControl className={classes.form}>
+        <>
+          <InputLabel htmlFor="input-with-icon-adornment">
+            Enter location
+          </InputLabel>
+          <Input
+            id="input-with-icon-adornment"
+            onChange={handleChange}
+            startAdornment={
+              <InputAdornment position="start">
+                <LocationOnIcon />
+              </InputAdornment>
+            }
+          />
+        </>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="primary"
+          onClick={props.searchAddress}>
+          Search
+        </Button>
       </FormControl>
-    </div>
+    </LocationInputWrapper>
   );
 }
