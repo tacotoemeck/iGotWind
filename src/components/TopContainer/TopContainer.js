@@ -13,7 +13,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { makeStyles } from "@material-ui/core/styles";
-// import { ThemeConsumer } from "styled-components";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -53,21 +52,20 @@ function TopContainer(props) {
     const func = async () => {
       const fetchLocation = await fetch(
         `../../../.netlify/functions/searchAddress/searchAddress.js?SEARCH_PARAMS=${addressInput}`,
-      );
+      ).catch(console.error);
 
-      await fetchLocation.json().then((data) => {
-        setAddressOptions(data);
-        setAddressSelectionMode("dropdown");
-      });
+      await fetchLocation
+        .json()
+        .then((data) => {
+          setAddressOptions(data);
+          setAddressSelectionMode("dropdown");
+        })
+        .catch(console.error);
     };
-    if (!addressInput) {
-      return;
-    } else {
-      func();
-    }
+    func();
   };
 
-  useEffect(() => {
+  const getCurrentAddress = async () => {
     const func = async () => {
       const fetchLocation = await fetch(
         `../../../.netlify/functions/fetchAddress/fetchAddress.js?COORDS={"LATITUDE": ${props.currentLocationCoordinates.latitude}, "LONGITUDE":${props.currentLocationCoordinates.longitude}}`,
@@ -79,7 +77,15 @@ function TopContainer(props) {
         })
         .catch(console.error);
     };
+
     func();
+  };
+
+  useEffect(() => {
+    // if 'useCurrentLocation' has been used , run get the current address from the locationIQ api
+    if (props.currentLocationCoordinates.latitude > 0) {
+      getCurrentAddress();
+    }
   }, [props.currentLocationCoordinates]);
 
   const handleChange = async (event) => {
@@ -94,6 +100,9 @@ function TopContainer(props) {
       .catch(console.error);
   };
 
+  //   different output depending on the application state :
+
+  //
   const pickAddressInput = (
     <FormControl className={classes.formControl}>
       <InputLabel id="demo-simple-select-label">Choose address</InputLabel>
