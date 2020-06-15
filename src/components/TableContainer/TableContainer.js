@@ -53,6 +53,8 @@ function identifyWindDirection(degrees) {
 
 function DisplayTableContainer(props) {
   const [tableRows, setTableRows] = useState([]);
+
+  // material table icons
   const tableIcons = {
     FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
     LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
@@ -66,6 +68,8 @@ function DisplayTableContainer(props) {
     ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
     Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   };
+
+  // monster fetch request - needs debugging! Currently does not function correctly after several calls. Wrong indexes are used when assigning data received from the lambda function calls
   useEffect(() => {
     let currentLat = props.currentPostCode.lat;
     let currentLon = props.currentPostCode.lon;
@@ -77,20 +81,17 @@ function DisplayTableContainer(props) {
       function spaceRequests(index) {
         if (index < modifiedArray.length - 1) {
           let copyTableRows = [...tableRows];
-          console.log(copyTableRows);
+
           setTimeout(() => {
             index++;
-
+            // async function to fetch weather and the address for each item in the locations array
             const asyncLoop = async () => {
+              // get weather data
               const fetchWeather = await fetch(
                 `../../../.netlify/functions/getWeatherData/getWeatherData.js?COORDS={"LATITUDE":${modifiedArray[index].latitude}, "LONGITUDE":${modifiedArray[index].longitude}}`,
               ).catch(console.error);
 
-              const fetchLocation = await fetch(
-                `../../../.netlify/functions/getDistances/getDistances.js?COORDS={"CURRENT_LATITUDE":${currentLat}, "CURRENT_LONGITUDE":${currentLon}, "DESTINATION_LATITUDE":${modifiedArray[index].latitude}, "DESTINATION_LONGITUDE":${modifiedArray[index].longitude}}`,
-              ).catch(console.error);
-
-              await fetchWeather
+              const weatherInfo = await fetchWeather
                 .json()
                 .then((data) => {
                   // convert m per second to knots and round to 2 decimels + wind direction
@@ -109,6 +110,11 @@ function DisplayTableContainer(props) {
                 })
                 .catch(console.error);
 
+              // get distance data
+              const fetchLocation = await fetch(
+                `../../../.netlify/functions/getDistances/getDistances.js?COORDS={"CURRENT_LATITUDE":${currentLat}, "CURRENT_LONGITUDE":${currentLon}, "DESTINATION_LATITUDE":${modifiedArray[index].latitude}, "DESTINATION_LONGITUDE":${modifiedArray[index].longitude}}`,
+              ).catch(console.error);
+
               await fetchLocation
                 .json()
                 .then((data) => {
@@ -116,7 +122,7 @@ function DisplayTableContainer(props) {
                     (Number(data.routes[0].distance) / 1000).toFixed(2) + " km";
 
                   props.setAllSurfLocationsArray(modifiedArray);
-                  console.log("modifiedarray is :", modifiedArray);
+
                   setTableRows(copyTableRows);
                 })
                 .catch((error) => {
@@ -127,13 +133,14 @@ function DisplayTableContainer(props) {
             asyncLoop();
             // set the function to send a fetch request every 0.5s so server can handle the requests.
             spaceRequests(index);
-          }, 1000);
+          }, 1500);
         }
       }
       spaceRequests(-1);
     }
   }, [props.currentPostCode]);
 
+  // Material Table used to display data
   return (
     <>
       <TableTitleText>

@@ -1,7 +1,6 @@
 const fetch = require("node-fetch");
 
 exports.handler = async (event, context) => {
-  console.log("hello");
   const { LOCATION_IQ } = process.env; // .env from netlify are not working FIX!!!!
   const COORDS = event.queryStringParameters.COORDS;
   const COORDS_OBJ = JSON.parse(COORDS);
@@ -9,9 +8,7 @@ exports.handler = async (event, context) => {
   const CURRENT_LONGITUDE = COORDS_OBJ.CURRENT_LONGITUDE;
   const DESTINATION_LATITUDE = COORDS_OBJ.DESTINATION_LATITUDE;
   const DESTINATION_LONGITUDE = COORDS_OBJ.DESTINATION_LONGITUDE;
-  console.log(
-    `address is : https://eu1.locationiq.com/v1/directions/driving/${CURRENT_LONGITUDE},${CURRENT_LATITUDE};${DESTINATION_LONGITUDE},${DESTINATION_LATITUDE}?key=${LOCATION_IQ}&overview=false`,
-  );
+
   return new Promise((resolve, reject) => {
     fetch(
       `https://eu1.locationiq.com/v1/directions/driving/${CURRENT_LONGITUDE},${CURRENT_LATITUDE};${DESTINATION_LONGITUDE},${DESTINATION_LATITUDE}?key=${LOCATION_IQ}&overview=false`,

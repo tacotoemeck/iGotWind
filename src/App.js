@@ -16,8 +16,9 @@ function App() {
   const [currentPostCode, setCurrentPostCode] = useState(false);
   const [allSurfLocationsArray, setAllSurfLocationsArray] = useState(locations);
   const [userLevel, setUserLevel] = useState(false); // sets to novice, intermediate or expert
-  const [tableRows, setTableRows] = useState([]);
+  // const [tableRows, setTableRows] = useState([]);
 
+  // using state - 'choose level' buttons are dsiplayed first. Once data is collected, TopContainer with address input will be displayed
   return (
     <AppContainer>
       <SurfIcon />
@@ -43,8 +44,9 @@ function App() {
         currentPostCode={currentPostCode}
         allSurfLocationsArray={allSurfLocationsArray}
         setAllSurfLocationsArray={setAllSurfLocationsArray}
-        tableRows={tableRows}
-        setTableRows={setTableRows}></DisplayTableContainer>
+        // tableRows={tableRows}
+        // setTableRows={setTableRows}
+      ></DisplayTableContainer>
     </AppContainer>
   );
 }
