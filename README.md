@@ -152,6 +152,7 @@ Fetch function mentioned in the bugs/issues section also needs to be rewritten. 
 #### If given more time, I would:
 
 - Fix fetch function in `TableContainer.js` inside of the `useEffect`
+- Fix 'get current location' on mobile and other browsers
 - Write tests
 - Fulfill remaining user stories
 - Write better readme
